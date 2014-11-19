@@ -1,0 +1,32 @@
+<ion-side-menus>
+
+  <ion-pane ion-side-menu-content>
+    <ion-nav-bar class="bar-stable nav-title-slide-ios7">
+      <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i> Back</ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent" animation="no-animation"></ion-nav-view>
+  </ion-pane>
+
+  <ion-side-menu side="left">
+    <header class="bar bar-header bar-stable">
+      <h1 class="title">메뉴</h1>
+    </header>
+    <ion-content class="has-header">
+      <ion-list>
+        <ion-item nav-clear menu-close href="#/app/home">
+          홈
+        </ion-item>
+         <ion-item nav-clear menu-close href="#/app/browse">
+          공지사항
+        </ion-item>
+
+        <ion-item nav-clear menu-close href="#" onclick="window.open('http://www.einfomax.co.kr', '_blank', 'location=yes'); return false;">
+          연합인포맥스 팟캐스트
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/setting">
+          설정
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

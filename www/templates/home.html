@@ -1,0 +1,28 @@
+<ion-view title="{{navTitle}}">
+<ion-nav-buttons side="left">
+<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons>
+<div class="highlight">
+  <ion-slide-box >
+  <ion-slide ng-repeat="item in home.main">
+  <div class="preview" >
+    <img   ng-src="{{imageurl(item)}}">
+  </div>
+  </ion-slide>
+  </ion-slide-box>
+</div>
+<div class="button-bar" ng-init="isseries=true;isfavorite=false;">
+  <button class="button icon-left ion-home " ng-class="{'button-positive':isseries}"     ng-click="isseries=true;isfavorite=false;series();">시리즈별</button>
+  <button class="button icon-left ion-star"  ng-class="{'button-positive':isfavorite}"   ng-click="isseries=false;isfavorite=true;favorite();">인기 VOD</button>
+</div>
+<ion-scroll  direction="y"  ng-style="gridheight">
+  <div class="list" class="homelist">
+    <a class="item thumbail"
+      ng-repeat="item in datalist" 
+      ng-href="{{linkurl(item)}}">
+      <img   ng-src="{{imageurl(item)}}">
+      {{item.title}}
+    </a>
+  </div>
+</ion-scroll>
+</ion-view>
