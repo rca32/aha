@@ -75,7 +75,7 @@
 div.video-container
 {
   width: 100%;
-  height: 50%;
+  height: 100%;
 
 }
 
@@ -83,6 +83,7 @@ div.video-container  iframe
 {
     width: 100%;
     height: 50%;
+    min-height: 250px;
 }
 
 div.video-container.full

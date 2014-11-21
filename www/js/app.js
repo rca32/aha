@@ -11,31 +11,46 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives', 'aha.services','ngCordova'])
 .run(function($ionicPlatform, $rootScope,$cordovaPush) {
     $ionicPlatform.ready(function() {
-
-        if (window.cordova && window.cordova.plugins.Keyboard) {
+        console.log(device.platform);
+        if (window.cordova  && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
         if (window.StatusBar) {
             StatusBar.styleDefault();
-        }
+        } 
 
         if (screen && screen.lockOrientation) {
             screen.lockOrientation('portrait'); //세로 모드 강제 
         }
         $rootScope.deviceready = true;
         $rootScope.$broadcast("deviceready");
-
+        var appid = "";
+        if ( device.platform == 'android' || device.platform == 'Android' )
+        {
+            id = "689218406627";
+        }
+        else
+        {
+            id = "com.einfomax.ahamobile";
+        }
         try
         {
+            console.log("----");
               var androidConfig = {
-              "senderID":"689218406627",
+              "senderID":id
             };
 
             $cordovaPush.register(androidConfig).then(function(result) {
+                console.log(device.platform);
+                if ( device.platform == "iOS" || device.platform == "IOS")
+                {
+                    console.log(result);
+                    $rootScope.$broadcast("pushNotificationReceived",{event:"registered",regid:result});
+                }
                 console.log("register");
-                console.log(result);
             }, function(err) {
-
+                console.log("$cordovaPush.register err");
+                console.error(err);
             });
         }
         catch(error)

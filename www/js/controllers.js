@@ -3,8 +3,9 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $timeout, $http, URL) {
 
     $scope.$on('pushNotificationReceived', function(event, notification) {
-
+        console.log("pushNotificationReceived");
         if (notification && notification.event === "registered") {
+            console.log(notification["regid"]);
             if (window.device) {
                 window.device["regid"] = notification["regid"];
                 $http.post(URL + "/registered", window.device);
@@ -97,7 +98,6 @@ angular.module('starter.controllers', [])
             $scope.home = data;
             $ionicSlideBoxDelegate.update();
             $scope.series();
-            $store.set("HOME", $scope.home);
         }).
         error(function(data, status, headers, config) {
             $ionicLoading.hide();
