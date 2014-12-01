@@ -1,23 +1,247 @@
-/*
-To customize the look and feel of Ionic, you can override the variables
-in ionic's _variables.scss file.
-
-For example, you might change some of the default colors:
 
 $light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
 $positive:                        #4a87ee !default;
 $calm:                            #43cee6 !default;
 $balanced:                        #66cc33 !default;
 $energized:                       #f0b840 !default;
 $assertive:                       #ef4e3a !default;
 $royal:                           #8a6de9 !default;
-$dark:                            #444 !default;
-*/
+
+
+/////////////////////
+///modify
+//////////////////
+$stable:                          #BC483C !default;
+$button-stable-text:              #FFFFFF !default;
+$dark:                            #4F5668 !default;
+
+$menu-bg:						  $dark;  //menu Back color
+$item-default-text:               #FFFFFF !default; //menu text color
+$base-background-color:				$dark; //all back change
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-// Include all of Ionic
-@import "www/lib/ionic/scss/ionic";
 
+
+
+// Include all of Ionic
+@import "../www/lib/ionic/scss/ionic";
+//menu Back change
+.item-complex .item-content,
+.item-radio .item-content {
+  background-color: $dark;
+}
+//menu  border change
+.item.item-dark{
+	border-color:#333333;
+}
+
+
+/*사용자 정의*/
+$w-gray: #e3e3e3;
+$back-list-color: #f4f4f4;
+$font-title-color: #bc4839;
+$font-desc-color: #333333;
+$btn-select-color: #e96550;
+$btn-normal-color: #4f5668;
+
+html,body{
+    height: 100%;
+}
+.img-series{
+    background-image: url(../img/btn_series.png);
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: 20px center;
+}
+.img-hot{
+    background-image: url(../img/btn_hot.png);
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: 20px center;
+}
+#aha-app{
+    background-color: #FFFFFF;
+    div, h1, h2,h3,h4,h5,h6,p,span,button,a,pre{
+        font-family: "Malgun Gothic","NanumGothic" ,"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    }
+    .nav-area{
+        .list{
+            .item{
+                border: 0;
+                border-bottom: 1px solid #333333;
+                .nav-icon{
+                    width: 32px;
+                    position: absolute;
+                    left: 10px;
+                    top: 10px;
+                }
+            }
+        }
+    }
+    .pane, .view{
+        background-color: #FFFFFF;
+    }
+    .youtube{
+        background-color: $back-list-color;
+        .video-container{
+            margin-bottom: -5px;
+            height: 260px;
+            &.normal{
+                position:relative;
+                z-index: 10;
+            }
+            iframe{
+                width:100%;
+                height: 260px;
+            }
+        }
+        .share-area{
+            border-top: 1px solid $w-gray;
+            background-color: #FFFFFF;
+            padding: 10px 5px;
+            .col{
+                padding:0;
+                .button{
+                    height: 32px;
+                }
+            }
+            .share-img{
+                height: 30px;
+            }
+        }
+        .playerslide{
+            .slider-pager{
+                top: 10px;
+                .icon{
+                    color: #E0E1E6;
+                }
+                .active{
+                    .icon{
+                        color: #8D94AE;
+                    }
+                }
+            }
+            .slider-slides{
+                margin-top: 25px;
+            }
+            .playeritem{
+                text-decoration: none;
+                color: #000;
+                text-align: center;
+                img{
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+    .bar-stable{
+        border:0;
+    }
+    .title-image{
+        height: 100%;
+    }
+    .bar-footer{
+        background-image: none;
+        height: 50px;
+        .title-link{
+            border: 1px solid $w-gray;
+            margin-bottom: 10px;
+            height: 42px;
+            line-height: 42px;
+        }
+    }
+    .button-bar{
+        .button{
+            border: 0;
+            background-color: $btn-select-color;
+            font-size: 16px;
+            font-weight: bold;
+            &.button-dark{
+                background-color: $btn-normal-color;
+                font-weight: normal;
+            }
+            &.aha-home{
+                @extend .img-series;
+            }
+            &.aha-hot{
+                @extend .img-hot;
+            }
+        }
+    }
+    .ahaslide{
+        height: 202px;
+        .preview{
+            text-align: center;
+            margin-bottom:-5px;
+            img{
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    }
+    .ahalist{
+        .item{
+            padding: 10px 20px 10px 140px;
+            height: 110px;
+            position:relative;
+            .img-area{
+                position: absolute;
+                left: 10px;
+                max-width: 120px;
+                max-height: 90px;
+            }
+            .ion-chevron-right{
+                position:absolute;
+                right: 10px;
+                top: 45px;
+                color: $w-gray;
+                font-size: 20px;
+            }
+            .title{
+                font-size: 15px;
+                font-weight: bold;
+                color: $font-title-color;
+            }
+            .desc{
+                font-size: 14px;
+                color: $font-desc-color;
+                overflow: hidden;
+                height: 67px;
+                line-height: 22px;
+            }
+        }
+    }
+    .ahamodal{
+        background-color: #F3F3F3;
+        .bar-header{
+            background-color: $stable;
+            .title{
+                color: $button-stable-text;
+                font-weight: bold;
+            }
+        }
+        .aha-opinions-list{
+            background-color: #FFFFFF;
+            border-bottom: 1px solid $w-gray;
+            .item{
+                border:0;
+                border-top: 1px solid $w-gray;
+                padding: 10px;
+                .title{
+                    color: #398BBD;
+                    margin-bottom: 10px;
+                    .date{
+                        color: #9a9a9a;
+                    }
+                }
+                .desc{
+                    max-height: 100px;
+                    overflow: hidden;
+                    color: #333333;
+                }
+            }
+        }
+    }
+}

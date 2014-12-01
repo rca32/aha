@@ -1,32 +1,49 @@
 <ion-side-menus>
 
-  <ion-pane ion-side-menu-content>
-    <ion-nav-bar class="bar-stable nav-title-slide-ios7">
-      <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i> Back</ion-nav-back-button>
-    </ion-nav-bar>
-    <ion-nav-view name="menuContent" animation="no-animation"></ion-nav-view>
-  </ion-pane>
+    <ion-pane ion-side-menu-content>
+        <ion-nav-bar class="bar-stable nav-title-slide-ios7">
+            <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i>
+            </ion-nav-back-button>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent" animation="no-animation"></ion-nav-view>
+    </ion-pane>
 
-  <ion-side-menu side="left">
-    <header class="bar bar-header bar-stable">
-      <h1 class="title">메뉴</h1>
-    </header>
-    <ion-content class="has-header">
-      <ion-list>
-        <ion-item nav-clear menu-close href="#/app/home">
-          홈
-        </ion-item>
-         <ion-item nav-clear menu-close href="#/app/browse">
-          공지사항
-        </ion-item>
-
-        <ion-item nav-clear menu-close href="#" onclick="window.open('http://www.einfomax.co.kr', '_blank', 'location=yes'); return false;">
-          연합인포맥스 팟캐스트
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/setting">
-          설정
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
+    <ion-side-menu side="left">
+        <header class="bar bar-header bar-stable item-icon-right">
+            <h1 class="title">전체메뉴</h1>
+            <i class="icon ion-ios7-close-empty" menu-close></i>
+        </header>
+        <ion-content class="has-header nav-area">
+            <div class="list">
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#/app/home">
+                    <img src="img/btn_home.png" class="nav-icon" alt="">
+                    홈 
+                </a>
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#/app/recentlist">
+                    <img src="img/btn_new.png" class="nav-icon" alt="">
+                    최신 VOD
+                </a>
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#/app/serieslist">
+                    <img src="img/btn_series.png" class="nav-icon" alt="">
+                    시리즈별 VOD
+                </a>
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#/app/favoritelist">
+                    <img src="img/btn_hot.png" class="nav-icon" alt="">
+                    인기 VOD
+                </a>
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#/app/browse">
+                    <img src="img/btn_notice.png" class="nav-icon" alt="">
+                    공지사항
+                </a>
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#" onclick="window.open('http://www.einfomax.co.kr', '_blank', 'location=yes'); return false;">
+                    <img src="img/btn_podcast.png" class="nav-icon" alt="">
+                    연합인포맥스 팟캐스트
+                </a>
+                <a class="item item-dark item-icon-left" nav-clear menu-close href="#/app/setting">
+                    <img src="img/btn_setting.png" class="nav-icon" alt="">
+                    설정
+                </a>
+            </div>
+        </ion-content>
+    </ion-side-menu>
 </ion-side-menus>

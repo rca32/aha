@@ -1,113 +1,110 @@
 angular.module('starter.controllers', [])
+    .controller('AppCtrl', function($scope, $timeout, $http, URL) {
 
-.controller('AppCtrl', function($scope, $timeout, $http, URL) {
+        $scope.$on('pushNotificationReceived', function(event, notification) {
+            console.log("pushNotificationReceived");
+            if (notification && notification.event === "registered") {
+                console.log(notification["regid"]);
+                if (window.device) {
+                    window.device["regid"] = notification["regid"];
+                    $http.post(URL + "/registered", window.device);
+                }
+            } else {
 
-    $scope.$on('pushNotificationReceived', function(event, notification) {
-        console.log("pushNotificationReceived");
-        if (notification && notification.event === "registered") {
-            console.log(notification["regid"]);
-            if (window.device) {
-                window.device["regid"] = notification["regid"];
-                $http.post(URL + "/registered", window.device);
             }
-        } else {
 
+        });
+
+        $scope.$on("deviceready", function(event, data) {
+            if (window.device) {
+                $http.post(URL + "/start", window.device);
+            }
+
+
+        });
+
+    })
+    .controller('HomeCtrl', function($scope, $http, URL, DEFAULTHOME, $ionicLoading,
+        $ionicScrollDelegate, $ionicSlideBoxDelegate, $cordovaDeviceOrientation, $rootScope, $window) {
+
+        try {
+
+            $scope.home = DEFAULTHOME;
+            $scope.datalist = $scope.home.series;
+            $scope.URL = URL;
+
+
+            var servererror = false;
+
+            if ($rootScope.deviceready) {
+                if (screen && screen.lockOrientation) {
+                    screen.lockOrientation('portrait'); //세로 모드 강제 
+                }
+            }
+
+            init();
+
+        } catch (error) {
+
+            console.error("error:" + error.message);
         }
 
-    });
 
-    $scope.$on("deviceready", function(event, data) {
-        if (window.device) {
-            $http.post(URL + "/start", window.device);
-        }
-
-
-    });
-
-})
-
-.controller('HomeCtrl', function($scope, $http, URL, DEFAULTHOME, $ionicLoading,
-    $ionicScrollDelegate, $ionicSlideBoxDelegate, $cordovaDeviceOrientation, $rootScope) {
-
-    try {
-        $scope.navTitle = '<img class="title-image" src="img/logo.png" />';
-        $scope.home = DEFAULTHOME;
-        $scope.datalist = $scope.home.series;
-        $scope.URL = URL;
-        $scope.gridheight = {
-            "height": (window.innerHeight - 300) + "px"
+        $scope.series = function() {
+            $scope.datalist = $scope.home.series;
+            $ionicScrollDelegate.scrollTop();
         };
 
-        var servererror = false;
+        $scope.favorite = function() {
+            $scope.datalist = $scope.home.favorite;
+            $ionicScrollDelegate.scrollTop();
+        };
 
-        if ($rootScope.deviceready) {
-            if (screen && screen.lockOrientation) {
-                screen.lockOrientation('portrait'); //세로 모드 강제 
+        $scope.imageurl = function(item) {
+            console.log(item);
+            if (servererror === true) {
+                return '/img/localpreview1.jpg';
             }
+            if (item.type === "series") {
+                return URL + '/media/' + item.thumb;
+            } else if (item.type === "video") {
+                return "https://i.ytimg.com/vi/" + item.thumb + "/default.jpg";
+            } else if (item.type === "seriesdefault") {
+                return '/img/' + item.thumb;
+            } else if (item.type === "videolocal") {
+                return '/img/' + item.thumb;
+            }
+        };
+
+        $scope.linkurl = function(item) {
+            if (item.type === "series") {
+                return "#/app/episodelist/" + item.id;
+            } else if (item.type === "video") {
+                return "#/app/player/" + item.id;
+            }
+        };
+
+
+        function init() {
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+            $http.get(URL + "/home").
+            success(function(data, status, headers, config) {
+                $ionicLoading.hide();
+                $scope.home = data;
+                $ionicSlideBoxDelegate.update();
+                $scope.series();
+            }).
+            error(function(data, status, headers, config) {
+                $ionicLoading.hide();
+
+            });
         }
 
-        init();
-
-    } catch (error) {
-
-        console.error("error:" + error.message);
-    }
 
 
-    $scope.series = function() {
-        $scope.datalist = $scope.home.series;
-        $ionicScrollDelegate.scrollTop();
-    };
-
-    $scope.favorite = function() {
-        $scope.datalist = $scope.home.favorite;
-        $ionicScrollDelegate.scrollTop();
-    };
-
-    $scope.imageurl = function(item) {
-        if (servererror === true) {
-            return '/img/localpreview1.jpg';
-        }
-        if (item.type === "series") {
-            return URL + '/media/' + item.thumb;
-        } else if (item.type === "video") {
-            return "https://i.ytimg.com/vi/" + item.youtube + "/default.jpg";
-        } else if (item.type === "seriesdefault") {
-            return '/img/' + item.thumb;
-        } else if (item.type === "videolocal") {
-            return '/img/' + item.thumb;
-        }
-    };
-
-    $scope.linkurl = function(item) {
-        if (item.type === "series") {
-            return "#/app/episodelist/" + item.id;
-        } else if (item.type === "video") {
-            return "#/app/player/" + item.id;
-        }
-    };
-
-
-    function init() {
-        $ionicLoading.show({
-            template: 'Loading...'
-        });
-        $http.get(URL + "/home").
-        success(function(data, status, headers, config) {
-            $ionicLoading.hide();
-            $scope.home = data;
-            $ionicSlideBoxDelegate.update();
-            $scope.series();
-        }).
-        error(function(data, status, headers, config) {
-            $ionicLoading.hide();
-
-        });
-    }
-
-
-
-})
+    })
     .controller('EpisodeCtrl', function($scope, $http, URL, $rootScope, $stateParams, $timeout) {
         $scope.series = {
             title: "시리즈",
@@ -117,6 +114,31 @@ angular.module('starter.controllers', [])
 
         function init() {
             $http.get(URL + "/seriesallvideo/" + $stateParams.seriesid).
+            success(function(data, status, headers, config) {
+                console.log(data);
+                $scope.series.data = data;
+            }).
+            error(function(data, status, headers, config) {
+
+            });
+        }
+
+        if ($rootScope.deviceready) {
+            if (screen && screen.lockOrientation) {
+                screen.lockOrientation('portrait'); //세로 모드 강제 
+            }
+        }
+
+        init();
+    })
+    .controller('RecentCtrl', function($scope, $http, URL, $rootScope, $stateParams, $timeout) {
+        $scope.series = {
+            data: []
+        };
+        $scope.URL = URL;
+
+        function init() {
+            $http.get(URL + "/recentallvideo/").
             success(function(data, status, headers, config) {
 
                 $scope.series = data;
@@ -134,13 +156,118 @@ angular.module('starter.controllers', [])
 
         init();
     })
-    .controller('PlaylistCtrl', function($scope, $http, URL, $stateParams, $timeout, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate) {
+    .controller('SeriesCtrl', function($scope, $http, URL, $rootScope, $stateParams, $timeout, $ionicLoading) {
+        $scope.URL = URL;
+        var servererror = false;
+        $scope.imageurl = function(item) {
+            if (servererror === true) {
+                return '/img/localpreview1.jpg';
+            }
+            if (item.type === "series") {
+                return URL + '/media/' + item.thumb;
+            } else if (item.type === "video") {
+                return "https://i.ytimg.com/vi/" + item.youtube + "/default.jpg";
+            } else if (item.type === "seriesdefault") {
+                return '/img/' + item.thumb;
+            } else if (item.type === "videolocal") {
+                return '/img/' + item.thumb;
+            }
+        };
+
+        $scope.linkurl = function(item) {
+            if (item.type === "series") {
+                return "#/app/episodelist/" + item.id;
+            } else if (item.type === "video") {
+                return "#/app/player/" + item.id;
+            }
+        };
+
+
+        function init() {
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+            $http.get(URL + "/home").
+            success(function(data, status, headers, config) {
+                $ionicLoading.hide();
+                $scope.datalist = data.series;
+
+            }).
+            error(function(data, status, headers, config) {
+                $ionicLoading.hide();
+
+            });
+        }
+
+        if ($rootScope.deviceready) {
+            if (screen && screen.lockOrientation) {
+                screen.lockOrientation('portrait'); //세로 모드 강제 
+            }
+        }
+
+        init();
+    })
+    .controller('FavoriteCtrl', function($scope, $http, URL, $rootScope, $stateParams, $timeout, $ionicLoading) {
+        $scope.URL = URL;
+        var servererror = false;
+        $scope.imageurl = function(item) {
+            if (servererror === true) {
+                return '/img/localpreview1.jpg';
+            }
+            if (item.type === "series") {
+                return URL + '/media/' + item.thumb;
+            } else if (item.type === "video") {
+                return "https://i.ytimg.com/vi/" + item.youtube + "/default.jpg";
+            } else if (item.type === "seriesdefault") {
+                return '/img/' + item.thumb;
+            } else if (item.type === "videolocal") {
+                return '/img/' + item.thumb;
+            }
+        };
+
+        $scope.linkurl = function(item) {
+            if (item.type === "series") {
+                return "#/app/episodelist/" + item.id;
+            } else if (item.type === "video") {
+                return "#/app/player/" + item.id;
+            }
+        };
+
+
+        function init() {
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+            $http.get(URL + "/home").
+            success(function(data, status, headers, config) {
+                $ionicLoading.hide();
+                $scope.datalist = data.favorite;
+
+            }).
+            error(function(data, status, headers, config) {
+                $ionicLoading.hide();
+
+            });
+        }
+
+        if ($rootScope.deviceready) {
+            if (screen && screen.lockOrientation) {
+                screen.lockOrientation('portrait'); //세로 모드 강제 
+            }
+        }
+
+        init();
+    })
+    .controller('PlaylistCtrl', function($scope, $http, URL, $stateParams, $timeout, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate, $ionicScrollDelegate) {
 
         $scope.videoinfo = {};
         $scope.series = [];
         $scope.playerclass = "normal";
         $scope.opinion_items = [];
-        $scope.option= {showfooter:true}; //하단 footer 보기
+        $scope.option = {
+            showfooter: true,
+            scrolltop: 0
+        }; //하단 footer 보기
 
         //의견 보기 
 
@@ -161,9 +288,28 @@ angular.module('starter.controllers', [])
             error(function(data, status, headers, config) {
 
             });
-
+ 
         };
 
+        $scope.shareall = function(desc,code){
+            var linkurl = "http://youtu.be/" + code;
+            window.plugins.socialsharing.share(desc, "아하 경제제공",null,linkurl);
+        };
+
+        $scope.twittershare = function(desc,code){
+            var linkurl = "http://youtu.be/" + code;
+            window.plugins.socialsharing.shareViaTwitter("아하 경제제공:" +desc, null /* img */,linkurl,function(){},function(errormsg){alert("트윗을 할수 없습니다.");});
+        };
+
+        $scope.facebookshare = function(desc,code){
+            var linkurl = "http://youtu.be/" + code;
+            window.plugins.socialsharing.shareViaFacebook("아하 경제제공:" +desc,null, linkurl,function(){},function(errormsg){alert("Facebook에 게시 할수 없습니다.");});
+        };
+
+        $scope.kakaoshare = function(desc,code){
+            var linkurl = "아하 경제제공:" + desc+" http://youtu.be/" + code;
+            KakaoLinkPlugin.call(linkurl);
+        };
         $scope.openOpinionWriteModal = function() {
             //의견 쓰기창 열기
             $scope.write_opinion_modal.show();
@@ -238,7 +384,7 @@ angular.module('starter.controllers', [])
             //의견수정
 
             var myPopup = $ionicPopup.show({
-                template: item.comments,
+                template: item.comments.replace(/\n/g, "<br/>"),
                 title: item.nickname,
                 subTitle: item.date,
                 scope: $scope,
@@ -327,7 +473,21 @@ angular.module('starter.controllers', [])
 
         init();
 
-        $scope.getItemHeight = function(item, index) {
-            return 120;
+    })
+
+    //공지사항 controller
+    .controller("BrowseCtrl",["$scope","$http","URL",function($scope,$http,URL){
+        $scope.page=1;
+
+        function loadNotice(){
+            $http.get(URL+"/notice/list/"+$scope.page).success(function(data){
+                console.log(data);
+            });
+        }
+        //더보기버튼클릭시
+        $scope.more=function(){
+            $scope.page++;
+            loadNotice();
         };
-    });
+        loadNotice();
+    }]);

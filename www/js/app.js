@@ -8,61 +8,77 @@
 // {
 //     console.log(eve);
 // }
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives', 'aha.services','ngCordova'])
-.run(function($ionicPlatform, $rootScope,$cordovaPush) {
-    $ionicPlatform.ready(function() {
-        console.log(device.platform);
-        if (window.cordova  && window.cordova.plugins.Keyboard) {
-            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        }
-        if (window.StatusBar) {
-            StatusBar.styleDefault();
-        } 
 
-        if (screen && screen.lockOrientation) {
-            screen.lockOrientation('portrait'); //세로 모드 강제 
-        }
-        $rootScope.deviceready = true;
-        $rootScope.$broadcast("deviceready");
-        var appid = "";
-        if ( device.platform == 'android' || device.platform == 'Android' )
-        {
-            id = "689218406627";
-        }
-        else
-        {
-            id = "com.einfomax.ahamobile";
-        }
-        try
-        {
-            console.log("----");
-              var androidConfig = {
-              "senderID":id
-            };
+window.onNotification=function(e){
+    console.log(e);   
+};
 
-            $cordovaPush.register(androidConfig).then(function(result) {
-                console.log(device.platform);
-                if ( device.platform == "iOS" || device.platform == "IOS")
-                {
-                    console.log(result);
-                    $rootScope.$broadcast("pushNotificationReceived",{event:"registered",regid:result});
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives', 'aha.services', 'ngCordova'])
+    .run(function($ionicPlatform, $rootScope, $cordovaPush) {
+        $ionicPlatform.ready(function() {
+            try {
+                if (window.cordova && window.cordova.plugins.Keyboard) {
+                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
-                console.log("register");
-            }, function(err) {
-                console.log("$cordovaPush.register err");
-                console.error(err);
-            });
-        }
-        catch(error)
-        {
-            console.error("androidConfig");
-            console.error("error:" + error.message);
-        }
+
+                if (window.StatusBar) {
+                    StatusBar.styleDefault();
+                }
+
+                if (screen && screen.lockOrientation) {
+                    screen.lockOrientation('portrait'); //세로 모드 강제 
+                }
+                $rootScope.deviceready = true;
+                $rootScope.$broadcast("deviceready");
+                var appid = "";
+
+                var androidConfig = {};
+                var id;
+                // if (window.cordova && window.cordova.plugins.device &&window.cordova.platformId
+                    // (window.cordova.platformId=="android"||device.platform == 'android' || device.platform == 'Android')) {
+                if(navigator.userAgent.toLowerCase().indexOf("android")>-1){
+                    id = "689218406627";
+                    androidConfig.ecb="angular.element(document.querySelector('[ng-app]')).injector().get('$cordovaPush').onNotification";
+                } else {
+                    id = "com.einfomax.ahamobile";
+                }
+                androidConfig.senderID=id;
+                console.log(androidConfig);
+
+                //Push 왔을시
+                $cordovaPush.onNotification=function(notification){
+                    console.log(notification);
+                    if(notification.event==="registered"){
+                        $rootScope.$broadcast("pushNotificationReceived", {
+                            event: notification.event,
+                            regid: notification.regid
+                        });
+                    }
+                };
 
 
-            
-    });
-})
+                $cordovaPush.register(androidConfig).then(function(result) {
+                    console.log(result);
+
+                    if (device.platform == "iOS" || device.platform == "IOS") {
+
+                        $rootScope.$broadcast("pushNotificationReceived", {
+                            event: "registered",
+                            regid: result
+                        });
+                    }
+
+                }, function(err) {
+                    console.log("$cordovaPush.register err");
+                    console.error(err);
+                });
+            } catch (error) {
+                console.error("androidConfig");
+                console.error("error:" + error.message);
+            }
+
+        });
+    })
 
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -72,25 +88,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
             templateUrl: "templates/menu.html",
             controller: 'AppCtrl'
         })
-
-    .state('app.browse', {
-        url: "/browse",
-        views: {
-            'menuContent': {
-                templateUrl: "templates/browse.html"
+        .state('app.browse', {
+            url: "/browse",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/browse.html",
+                    controller: 'BrowseCtrl'
+                }
             }
-        }
-    })
-
-    .state('app.setting', {
-        url: "/setting",
-        views: {
-            'menuContent': {
-                templateUrl: "templates/setting.html",
-                controller: 'HomeCtrl'
+        })
+        .state('app.setting', {
+            url: "/setting",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/setting.html",
+                    controller: 'HomeCtrl'
+                }
             }
-        }
-    })
+        })
         .state('app.home', {
             url: "/home",
             views: {
@@ -109,6 +124,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
                 }
             }
         })
+        .state('app.recentlist', {
+            url: "/recentlist",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/recentlist.html",
+                    controller: 'RecentCtrl'
+                }
+            }
+        })
+        .state('app.serieslist', {
+            url: "/serieslist",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/serieslist.html",
+                    controller: 'SeriesCtrl'
+                }
+            }
+        })
+        .state('app.favoritelist', {
+            url: "/favoritelist",
+            views: {
+                'menuContent': {
+                    templateUrl: "templates/favoritelist.html",
+                    controller: 'FavoriteCtrl'
+                }
+            }
+        })
         .state('app.player', {
             url: "/player/:videoid",
             views: {
@@ -121,3 +163,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
 });
+
+// function (e){
+//     console.log(e);
+// }

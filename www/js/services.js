@@ -1,24 +1,25 @@
 angular.module('aha.services', [])
     .value('URL', "http://ahamobile.einfomax.co.kr")
-    .filter('cut', function() {
-        return function(value, wordwise, max, tail) {
-            if (!value) return '';
+// .value('URL', "http://211.181.93.11:15000")
+.filter('cut', function() {
+    return function(value, wordwise, max, tail) {
+        if (!value) return '';
 
-            max = parseInt(max, 10);
-            if (!max) return value;
-            if (value.length <= max) return value;
+        max = parseInt(max, 10);
+        if (!max) return value;
+        if (value.length <= max) return value;
 
-            value = value.substr(0, max);
-            if (wordwise) {
-                var lastspace = value.lastIndexOf(' ');
-                if (lastspace != -1) {
-                    value = value.substr(0, lastspace);
-                }
+        value = value.substr(0, max);
+        if (wordwise) {
+            var lastspace = value.lastIndexOf(' ');
+            if (lastspace != -1) {
+                value = value.substr(0, lastspace);
             }
+        }
 
-            return value + (tail || ' …');
-        };
-    })
+        return value + (tail || ' …');
+    };
+})
     .factory("$store", function($parse) {
         /**
          * Global Vars
@@ -128,48 +129,41 @@ angular.module('aha.services', [])
         };
         return publicMethods;
     })
-.value('DEFAULTHOME',
-{
-    "logo":"",
-    "main":[{
-                    type:"seriesdefault",
-                    id:"1",
-                    thumb:"localpreview1.jpg",
-                    title:"준비중",
-                    content:""
-                },
-                {
-                    type:"seriesdefault",
-                    id:"1",
-                    thumb:"localpreview1.jpg",
-                    title:"준비중",
-                    content:""
-                },
-                {
-                    type:"seriesdefault",
-                    id:"1",
-                    thumb:"localpreview1.jpg",
-                    title:"준비중",
-                    content:""
-                }],
-    "series":[
-                {
-                    type:"seriesdefault",
-                    id:"1",
-                    thumb:"localpreview1.jpg",
-                    title:"준비중",
-                    content:"준비중"
-                }
-            ],
-    "favorite":[
-            {
-                type:"videolocal",
-                id:"1",
-                thumb:"localpreview1.jpg",
-                title:"준비중",
-                content:"준비중"
-            }
-        ]
-}
+    .value('DEFAULTHOME', {
+            "logo": "",
+            "main": [{
+                type: "seriesdefault",
+                id: "1",
+                thumb: "localpreview1.jpg",
+                title: "준비중",
+                content: ""
+            }, {
+                type: "seriesdefault",
+                id: "1",
+                thumb: "localpreview1.jpg",
+                title: "준비중",
+                content: ""
+            }, {
+                type: "seriesdefault",
+                id: "1",
+                thumb: "localpreview1.jpg",
+                title: "준비중",
+                content: ""
+            }],
+            "series": [{
+                type: "seriesdefault",
+                id: "1",
+                thumb: "localpreview1.jpg",
+                title: "준비중",
+                content: "준비중"
+            }],
+            "favorite": [{
+                type: "videolocal",
+                id: "1",
+                thumb: "localpreview1.jpg",
+                title: "준비중",
+                content: "준비중"
+            }]
+        }
 
 );
