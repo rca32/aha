@@ -59,7 +59,6 @@ angular.module('starter.controllers', [])
         };
 
         $scope.imageurl = function(item) {
-            console.log(item);
             if (servererror === true) {
                 return '/img/localpreview1.jpg';
             }
