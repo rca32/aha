@@ -1,10 +1,12 @@
 <script id="opinions.html" type="text/ng-template">
     <ion-modal-view class="ahamodal modal-opinions">
         <ion-header-bar>
-            <div class="button button-clear" ng-click="openOpinionWriteModal()"><span class="icon ion-plus-circled calm"></span>
+            <div class="button button-clear button-small" ng-click="openOpinionWriteModal()">
+                <img class="nav-img" src="img/Write.png">
             </div>
             <h1 class="title">의견보기</h1>
-            <div class="button button-clear" ng-click="opinion_modal.hide()"><span class="icon ion-close"></span>
+            <div class="button button-clear button-small" ng-click="opinion_modal.hide()">
+                <img class="nav-img" src="img/close_2.png">
             </div>
         </ion-header-bar>
         <ion-content>
@@ -13,7 +15,9 @@
                     <div class="title">
                         {{item.nickname}} 
                         <span class="date">{{item.date}}</span>
-                        <i class="icon dark ion-trash-a" style="font-size:16pt;right:1px;" ng-click="deleteOpinion($event,item)"></i>
+                        <div class="btn-delete" ng-click="deleteOpinion($event,item)">
+                            <img class="share-img" src="img/trash.png">          
+                        </div>
                     </div>
                     <pre class="desc">{{item.comments|cut:false:100:'...'}}</pre>
                 </div>
@@ -25,33 +29,41 @@
     <form name="inputform" novalidate>
         <ion-modal-view class="ahamodal modal-writeopinion">
             <ion-header-bar>
-                <div class="button button-clear" ng-disabled="inputform.$invalid" ng-click="writeOpinion()"><span class="icon ion-checkmark-circled positive"></span>
+                <div class="button button-clear button-small" ng-disabled="inputform.$invalid" ng-click="writeOpinion()">
+                    <img class="nav-img" src="img/ok.png">
                 </div>
                 <h1 class="title">의견쓰기</h1>
-                <div class="button button-clear" ng-click="write_opinion_modal.hide()"><span class="icon ion-close"></span>
+                <div class="button button-clear" ng-click="write_opinion_modal.hide()">
+                    <img class="nav-img" src="img/close_2.png">
                 </div>
             </ion-header-bar>
             <ion-content>
                 <div class="list">
                     <label class="item item-input item-stacked-label">
+                        <!--
                         <span ng-show="inputform.nickname.$valid" class="input-label">별명</span>
                         <span class="assertive" ng-show="inputform.nickname.$error.required">별명을 입력하셔야 합니다.</span>
                         <span class="assertive" ng-show="inputform.nickname.$error.minlength">별명이 너무 짧아요</span>
                         <span class="assertive" ng-show="inputform.nickname.$error.maxlength">별명이 너무 길어요</span>
-                        <input type="text" placeholder="별명" name="nickname" ng-model="newopinion.nickname" ng-required="true" ng-minlength="2" ng-maxlength="20">
+                        -->
+                        <input class="padding-left10" type="text" placeholder="별명 입력" name="nickname" ng-model="newopinion.nickname" ng-required="true" ng-minlength="2" ng-maxlength="20">
                     </label>
                     <label class="item item-input item-stacked-label">
+                        <!--
                         <span ng-show="inputform.password.$valid" class="input-label">암호</span>
-                        <span class="assertive" ng-show="inputform.password.$error.required">암호를 입력하셔야 합니다.</span>
-                        <span class="assertive" ng-show="inputform.password.$error.minlength">암호가 너무 짧아요</span>
-                        <span class="assertive" ng-show="inputform.password.$error.maxlength">암호가 너무 길어요</span>
-                        <input type="password" name="password" placeholder="암호" ng-model="newopinion.passwd" ng-required="true" ng-minlength="4" ng-maxlength="20">
+                        <span class="assertive" ng-show="inputform.password.$error.required">비밀번호를 입력하셔야 합니다.</span>
+                        <span class="assertive" ng-show="inputform.password.$error.minlength">비밀번호가 너무 짧아요</span>
+                        <span class="assertive" ng-show="inputform.password.$error.maxlength">비밀번호가 너무 길어요</span>
+                        -->
+                        <input class="padding-left10" type="password" name="password" placeholder="비밀번호 입력" ng-model="newopinion.passwd" ng-required="true" ng-minlength="4" ng-maxlength="20">
                     </label>
                     <label class="item item-input item-stacked-label">
+                        <!--
                         <span ng-show="inputform.comments.$valid" class="input-label">의견</span>
                         <span class="assertive" ng-show="inputform.comments.$error.required">의견을 입력하셔야 합니다.</span>
                         <span class="assertive" ng-show="inputform.comments.$error.maxlength">의견이 너무 길어요</span>
-                        <textarea placeholder="Comments" name="comments" style="height:200px;" ng-model="newopinion.comments" ng-required="true" ng-maxlength="300"></textarea>
+                        -->
+                        <textarea class="padding-left10" placeholder="의견을 입력하세요." name="comments" style="height:200px;" ng-model="newopinion.comments" ng-required="true" ng-maxlength="300"></textarea>
                     </label>
                 </div>
             </ion-content>
@@ -81,9 +93,12 @@
             </div>
         </div>
         <a class="item item-icon-right" ng-init="showmore = false" ng-click="showmore = !showmore">
-            <span ng-show="!showmore"> {{videoinfo.desc}}</span>
-            <pre ng-show="showmore"> {{videoinfo.desc}}</pre>
-            <i class="icon" ng-class="{'ion-arrow-down-b':showmore,'ion-arrow-left-b':!showmore}"></i>
+            <span ng-show="!showmore">{{videoinfo.desc}}</span>
+            <pre ng-show="showmore">{{videoinfo.desc}}</pre>
+            <button class="button button-clear button-small btn-more-area">
+                <img ng-show="!showmore" class="share-img" src="img/more.png">
+                <img ng-show="showmore" class="share-img" src="img/close.png">
+            </button>
         </a>
         <ion-slide-box class="playerslide">
             <ion-slide ng-repeat="item in series">

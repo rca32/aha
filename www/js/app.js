@@ -10,13 +10,17 @@
 // }
 
 window.onNotification=function(e){
-    console.log(e);   
+    console.log(e);
 };
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives', 'aha.services', 'ngCordova'])
     .run(function($ionicPlatform, $rootScope, $cordovaPush) {
         $ionicPlatform.ready(function() {
             try {
+                if(navigator && navigator.splashscreen)
+                {
+                    navigator.splashscreen.hide();
+                }
                 if (window.cordova && window.cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }

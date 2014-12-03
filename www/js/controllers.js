@@ -2,9 +2,7 @@ angular.module('starter.controllers', [])
     .controller('AppCtrl', function($scope, $timeout, $http, URL) {
 
         $scope.$on('pushNotificationReceived', function(event, notification) {
-            console.log("pushNotificationReceived");
             if (notification && notification.event === "registered") {
-                console.log(notification["regid"]);
                 if (window.device) {
                     window.device["regid"] = notification["regid"];
                     $http.post(URL + "/registered", window.device);
@@ -68,7 +66,7 @@ angular.module('starter.controllers', [])
             if (item.type === "series") {
                 return URL + '/media/' + item.thumb;
             } else if (item.type === "video") {
-                return "https://i.ytimg.com/vi/" + item.thumb + "/default.jpg";
+                return "https://i.ytimg.com/vi/" + item.thumb + "/hqdefault.jpg";
             } else if (item.type === "seriesdefault") {
                 return '/img/' + item.thumb;
             } else if (item.type === "videolocal") {
@@ -113,10 +111,13 @@ angular.module('starter.controllers', [])
         $scope.URL = URL;
 
         function init() {
-            $http.get(URL + "/seriesallvideo/" + $stateParams.seriesid).
+            $http.get(URL + "/seriesandallvideo/" + $stateParams.seriesid).
             success(function(data, status, headers, config) {
-                console.log(data);
-                $scope.series.data = data;
+                if (data) {
+                    console.log(data);
+                    $scope.series.info = data.info;
+                    $scope.series.data = data.data;
+                }
             }).
             error(function(data, status, headers, config) {
 
@@ -288,26 +289,30 @@ angular.module('starter.controllers', [])
             error(function(data, status, headers, config) {
 
             });
- 
+
         };
 
-        $scope.shareall = function(desc,code){
+        $scope.shareall = function(desc, code) {
             var linkurl = "http://youtu.be/" + code;
-            window.plugins.socialsharing.share(desc, "아하 경제제공",null,linkurl);
+            window.plugins.socialsharing.share(desc, "아하 경제제공", null, linkurl);
         };
 
-        $scope.twittershare = function(desc,code){
+        $scope.twittershare = function(desc, code) {
             var linkurl = "http://youtu.be/" + code;
-            window.plugins.socialsharing.shareViaTwitter("아하 경제제공:" +desc, null /* img */,linkurl,function(){},function(errormsg){alert("트윗을 할수 없습니다.");});
+            window.plugins.socialsharing.shareViaTwitter("아하 경제제공:" + desc, null /* img */ , linkurl, function() {}, function(errormsg) {
+                alert("트윗을 할수 없습니다.");
+            });
         };
 
-        $scope.facebookshare = function(desc,code){
+        $scope.facebookshare = function(desc, code) {
             var linkurl = "http://youtu.be/" + code;
-            window.plugins.socialsharing.shareViaFacebook("아하 경제제공:" +desc,null, linkurl,function(){},function(errormsg){alert("Facebook에 게시 할수 없습니다.");});
+            window.plugins.socialsharing.shareViaFacebook("아하 경제제공:" + desc, null, linkurl, function() {}, function(errormsg) {
+                alert("Facebook에 게시 할수 없습니다.");
+            });
         };
 
-        $scope.kakaoshare = function(desc,code){
-            var linkurl = "아하 경제제공:" + desc+" http://youtu.be/" + code;
+        $scope.kakaoshare = function(desc, code) {
+            var linkurl = "아하 경제제공:" + desc + " http://youtu.be/" + code;
             KakaoLinkPlugin.call(linkurl);
         };
         $scope.openOpinionWriteModal = function() {
@@ -335,8 +340,8 @@ angular.module('starter.controllers', [])
             $event.stopPropagation();
             var myPopup = $ionicPopup.show({
                 template: '<input type="password" ng-model="inputdata.password">',
-                title: '삭제을 위해서 암호를 입력 하세요',
-                subTitle: '댓글을 작성 할떄 입력한 암호.',
+                title: '비밀번호를 입력 하세요.',
+                subTitle: '댓글을 작성 할떄 입력한 비밀번호.',
                 scope: $scope,
                 buttons: [{
                     text: '취소',
@@ -474,20 +479,28 @@ angular.module('starter.controllers', [])
         init();
 
     })
+//공지사항 controller
+.controller("BrowseCtrl", ["$scope", "$http", "URL",
+    function($scope, $http, URL) {
+        $scope.page = 1;
+        $scope.arrNotice = [];
+        $scope.options = {
+            last: false
+        };
 
-    //공지사항 controller
-    .controller("BrowseCtrl",["$scope","$http","URL",function($scope,$http,URL){
-        $scope.page=1;
-
-        function loadNotice(){
-            $http.get(URL+"/notice/list/"+$scope.page).success(function(data){
-                console.log(data);
+        function loadNotice() {
+            $http.get(URL + "/notice/list/" + $scope.page).success(function(data) {
+                $scope.arrNotice = $scope.arrNotice.concat(data);
+                if (data && data.length < 10) {
+                    $scope.options.last = true;
+                }
             });
         }
         //더보기버튼클릭시
-        $scope.more=function(){
+        $scope.more = function() {
             $scope.page++;
             loadNotice();
         };
         loadNotice();
-    }]);
+    }
+]);
