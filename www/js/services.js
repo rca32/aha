@@ -1,6 +1,6 @@
 angular.module('aha.services', [])
     .value('URL', "http://ahamobile.einfomax.co.kr")
-//.value('URL', "http://211.181.93.11:15000")
+    // .value('URL', "http://190.1.185.102:15000")
 .filter('cut', function() {
     return function(value, wordwise, max, tail) {
         if (!value) return '';

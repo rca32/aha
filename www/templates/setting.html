@@ -6,9 +6,9 @@
         <div class="list">
 
             <div class="item item-toggle">
-                새 Episode 등록, 이벤트 알림
+                <font color="black">새 Episode 등록, 이벤트 알림</font>
                 <label class="toggle toggle-assertive">
-                    <input type="checkbox">
+                    <input type="checkbox" ng-model="setting.push" ng-change="changesetting()">
                     <div class="track">
                         <div class="handle"></div>
                     </div>

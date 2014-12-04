@@ -1,5 +1,5 @@
 angular.module('starter.controllers', [])
-    .controller('AppCtrl', function($scope, $timeout, $http, URL) {
+    .controller('AppCtrl', function($scope, $timeout, $http, URL,$state) {
 
         $scope.$on('pushNotificationReceived', function(event, notification) {
             if (notification && notification.event === "registered") {
@@ -7,8 +7,9 @@ angular.module('starter.controllers', [])
                     window.device["regid"] = notification["regid"];
                     $http.post(URL + "/registered", window.device);
                 }
-            } else {
-
+            }else if (notification &&notification.data &&notification.data.payload&& notification.event === "message") {
+                var jumpurl = notification.data.payload["jumpurl"]||"app.home";
+                $state.go(jumpurl);
             }
 
         });
@@ -65,13 +66,22 @@ angular.module('starter.controllers', [])
             if (item.type === "series") {
                 return URL + '/media/' + item.thumb;
             } else if (item.type === "video") {
-                return "https://i.ytimg.com/vi/" + item.thumb + "/hqdefault.jpg";
+                return "https://i.ytimg.com/vi/" + item.youtube + "/hqdefault.jpg";
             } else if (item.type === "seriesdefault") {
                 return '/img/' + item.thumb;
             } else if (item.type === "videolocal") {
                 return '/img/' + item.thumb;
             }
         };
+
+        $scope.mainpreviewurl = function(item) {
+            if (servererror === true) {
+                return '/img/localpreview1.jpg';
+            }
+            return URL + '/media/' + item.thumb;
+  
+        };
+
 
         $scope.linkurl = function(item) {
             if (item.type === "series") {
@@ -501,5 +511,31 @@ angular.module('starter.controllers', [])
             loadNotice();
         };
         loadNotice();
+    }
+])
+//설정
+.controller("SettingCtrl", ["$scope", "$http", "URL",
+    function($scope, $http, URL) {
+        $scope.setting ={push:true};
+        $scope.changesetting = function()
+        {
+            if($scope.setting.push === true)
+            {
+                 $http.post(URL + "/setting" ,{uuid:device["uuid"],action:"change",push:1});
+            }
+            else
+            {
+                $http.post(URL + "/setting" ,{uuid:device["uuid"],action:"change",push:0});
+            }
+            
+        }
+        if (window.device) {
+            $http.post(URL + "/setting" ,{uuid:device["uuid"],action:"query"}).
+            success(function(data, status, headers, config) {
+                $scope.setting.push = data.push===1?true:false;
+            }).
+            error(function(data, status, headers, config) {
+            });
+        }
     }
 ]);

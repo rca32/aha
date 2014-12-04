@@ -52,10 +52,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
                 //Push 왔을시
                 $cordovaPush.onNotification=function(notification){
                     console.log(notification);
-                    if(notification.event==="registered"){
+                    if(notification.event==="registered" || notification.event==="message"){
                         $rootScope.$broadcast("pushNotificationReceived", {
                             event: notification.event,
-                            regid: notification.regid
+                            regid: notification.regid,
+                            data:notification
                         });
                     }
                 };
@@ -106,7 +107,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
             views: {
                 'menuContent': {
                     templateUrl: "templates/setting.html",
-                    controller: 'HomeCtrl'
+                    controller: 'SettingCtrl'
                 }
             }
         })
