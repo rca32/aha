@@ -12,7 +12,7 @@
 window.onNotification=function(e){
     console.log(e);
 };
-
+ 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives', 'aha.services', 'ngCordova'])
     .run(function($ionicPlatform, $rootScope, $cordovaPush) {
         $ionicPlatform.ready(function() {
