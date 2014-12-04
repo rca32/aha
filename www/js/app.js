@@ -51,14 +51,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
 
                 //Push 왔을시
                 $cordovaPush.onNotification=function(notification){
-                    console.log(notification);
-                    if(notification.event==="registered" || notification.event==="message"){
-                        $rootScope.$broadcast("pushNotificationReceived", {
-                            event: notification.event,
-                            regid: notification.regid,
-                            data:notification
-                        });
+                    console.log("notification");
+
+                    if (device.platform === "iOS" || device.platform === "IOS")
+                    {
+
+                         $rootScope.$broadcast("pushNotificationReceived", {
+                                event: "message",
+                                data:notification
+                            });
                     }
+                    else
+                    {
+                        if(notification.event==="registered" || notification.event==="message"){
+                            $rootScope.$broadcast("pushNotificationReceived", {
+                                event: notification.event,
+                                regid: notification.regid,
+                                data:notification
+                            });
+                        }
+                    }
+
                 };
 
 

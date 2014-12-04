@@ -7,8 +7,8 @@ angular.module('starter.controllers', [])
                     window.device["regid"] = notification["regid"];
                     $http.post(URL + "/registered", window.device);
                 }
-            }else if (notification &&notification.data &&notification.data.payload&& notification.event === "message") {
-                var jumpurl = notification.data.payload["jumpurl"]||"app.home";
+            }else if (notification &&notification.data && notification.event === "message") {
+                var jumpurl = notification.data["jumpurl"]||"app.home";
                 $state.go(jumpurl);
             }
 
