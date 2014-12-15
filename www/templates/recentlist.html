@@ -4,10 +4,10 @@
     </ion-nav-buttons>
     <ion-content class="has-header">
         <div class="list ahalist">
-            <a class="item" ng-repeat="item in series" href="#/app/player/{{item.idvideo}}">
+            <a class="item" ng-repeat="item in series" href="#/app/player/{{item.id}}">
                 <img class="img-area" ng-src="https://i.ytimg.com/vi/{{item.youtube}}/default.jpg">
-                <h2>{{item.title}}</h2>
-                <pre class="desc">{{item.desc}}</pre>
+                <h2 class="title">{{item.title}}</h2>
+                <pre class="desc">{{item.content}}</pre>
                 <i class="icon ion-chevron-right"></i>
             </a>
         </div>

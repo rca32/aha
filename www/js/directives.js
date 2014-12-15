@@ -38,21 +38,66 @@ angular.module('starter.directives', [])
             }
         };
     })
-    .directive('autoheight', function($window) {
+    .directive('autoheightmain', function($window, $timeout) {
 
         return {
             restrict: 'A',
             link: function(scope, el, attrs) {
+                var resize = function() {
+                    var windowHeight = $window.iennerHeight;
+                    var elWidth = el[0].clientWidth;
+                    elWidth = elWidth * 374 / 720;
+                    var elHeight = parseInt(elWidth);
+                    //상단 Height가 고정일떄..
+                    //el.css("height", windowHeight - elHeight + "px");
+                    el.css("height", elHeight + "px");
+                };
+                resize();
+                $timeout(function() {
+                    resize();
+                }, 1000);
+            }
+        };
+    })
+    .directive('autoheightepisode', function($window, $timeout) {
 
-                var windowHeight = $window.innerHeight;
-                var elWidth = el[0].clientWidth;
-                elWidth = elWidth * 9 / 16;
-                console.log(el[0].offsetTop, elWidth);
-                var elHeight = el[0].offsetTop + elWidth + 45;
-                console.log(windowHeight);
-                //상단 Height가 고정일떄..
-                //el.css("height", windowHeight - elHeight + "px");
-                el.css("height", windowHeight - el[0].offsetTop - 45 + "px");
+        return {
+            restrict: 'A',
+            link: function(scope, el, attrs) {
+                var resize = function() {
+                    var windowHeight = $window.iennerHeight;
+                    var elWidth = el[0].clientWidth;
+                    elWidth = elWidth * 248 / 720;
+                    var elHeight = parseInt(elWidth + 1);
+                    //상단 Height가 고정일떄..
+                    //el.css("height", windowHeight - elHeight + "px");
+                    el.css("max-height", elHeight + "px");
+                };
+                resize();
+                $timeout(function() {
+                    resize();
+                }, 1000);
+            }
+        };
+    })
+    .directive('autoheight', function($window, $timeout) {
+
+        return {
+            restrict: 'A',
+            link: function(scope, el, attrs) {
+                var resize = function() {
+                    var windowHeight = $window.innerHeight;
+                    var elWidth = el[0].clientWidth;
+                    elWidth = elWidth * 9 / 16;
+                    var elHeight = el[0].offsetTop + elWidth + 45;
+                    //상단 Height가 고정일떄..
+                    //el.css("height", windowHeight - elHeight + "px");
+                    el.css("height", windowHeight - el[0].offsetTop - 45 + "px");
+                };
+                resize();
+                $timeout(function() {
+                    resize();
+                }, 1000);
             }
         };
     });

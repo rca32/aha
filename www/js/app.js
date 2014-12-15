@@ -47,11 +47,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
                     id = "com.einfomax.ahamobile";
                 }
                 androidConfig.senderID=id;
-                console.log(androidConfig);
+                // console.log(androidConfig);
 
                 //Push 왔을시
                 $cordovaPush.onNotification=function(notification){
-                    console.log("notification");
 
                     if (device.platform === "iOS" || device.platform === "IOS")
                     {

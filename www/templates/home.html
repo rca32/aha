@@ -5,11 +5,11 @@
         </button>
     </ion-nav-buttons>
     <ion-content class="has-header">
-        <div class="highlight">
-            <ion-slide-box class="ahaslide">
+        <div class="highlight" >
+            <ion-slide-box class="ahaslide" autoheightmain>
                 <ion-slide ng-repeat="item in home.main">
-                    <div class="preview">
-                        <img ng-src="{{mainpreviewurl(item)}}">
+                    <div class="preview" ng-click="mainClick(item)" >
+                        <img src="img/sample.png" ng-src="{{mainpreviewurl(item)}}"  onerror="this.src='img/sample.png'"/>
                     </div>
                 </ion-slide>
             </ion-slide-box>

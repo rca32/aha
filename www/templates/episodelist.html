@@ -1,7 +1,7 @@
 <ion-view title="{{series.info.title}}">
     <ion-content class="has-header">
         <div class="img-area">
-            <img class="imgseries" ng-src="{{URL}}/media/{{series.info.imgurl}}" alt="">
+            <img autoheightepisode class="imgseries" src="img/sample1.png" ng-src="{{URL}}/media/{{series.info.imgurl}}" alt="" onerror="this.src='img/blank.png'">
         </div>
         <div class="list ahalist">
             <a class="item" ng-repeat="item in series.data" href="#/app/player/{{item.idvideo}}">

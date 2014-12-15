@@ -71,7 +71,7 @@
     </form>
 </script>
 <ion-view title="{{videoinfo.title||'동영상'}}" class="youtube">
-    <ion-content class="has-header" >
+    <ion-content class="has-header youtube-content" ng-class="playerclass">
         <youtube code="videoinfo.youtube" ng-class="playerclass" ></youtube>
 
         <div class="row share-area">
@@ -92,7 +92,7 @@
                 </button>
             </div>
         </div>
-        <a class="item item-icon-right" ng-init="showmore = false" ng-click="showmore = !showmore">
+        <a class="item item-icon-right" ng-init="showmore = false" ng-click="showmore = !showmore" >
             <span ng-show="!showmore">{{videoinfo.desc}}</span>
             <pre ng-show="showmore">{{videoinfo.desc}}</pre>
             <button class="button button-clear button-small btn-more-area">
@@ -113,6 +113,6 @@
 
     </ion-content>
     <div class="bar bar-footer" ng-show="option.showfooter">
-        <div class="title title-link" ng-click="openOpinionModal()">의견보기 / 의견쓰기</div>
+        <div class="title title-link" ng-click="openOpinionModal()">의견보기{{(videoinfo.count)? '('+videoinfo.count+')' : ''}} / 의견쓰기</div>
     </div>
 </ion-view>

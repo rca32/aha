@@ -1,5 +1,5 @@
 angular.module('starter.controllers', [])
-    .controller('AppCtrl', function($scope, $timeout, $http, URL,$state) {
+    .controller('AppCtrl', function($scope, $timeout, $http, URL, $state, version, $ionicPopup, common) {
 
         $scope.$on('pushNotificationReceived', function(event, notification) {
             if (notification && notification.event === "registered") {
@@ -7,8 +7,8 @@ angular.module('starter.controllers', [])
                     window.device["regid"] = notification["regid"];
                     $http.post(URL + "/registered", window.device);
                 }
-            }else if (notification &&notification.data && notification.event === "message") {
-                var jumpurl = notification.data["jumpurl"]||"app.home";
+            } else if (notification && notification.data && notification.event === "message") {
+                var jumpurl = notification.data["jumpurl"] || notification.data.payload["jumpurl"] || "app.home";
                 $state.go(jumpurl);
             }
 
@@ -16,15 +16,84 @@ angular.module('starter.controllers', [])
 
         $scope.$on("deviceready", function(event, data) {
             if (window.device) {
+                // console.log("ready??",window.device);
                 $http.post(URL + "/start", window.device);
+
             }
+            if (window.ionic && window.ionic.Platform) {
+                var v;
+                if (window.ionic.Platform.isAndroid()) {
+                    v = {
+                        version: version.android,
+                        platform: "android",
+                        device: window.device
+                    };
+                    common.setPlatform("android");
+                } else {
+                    v = {
+                        version: version.ios,
+                        platform: "ios",
+                        device: window.device
+                    };
+                    common.setPlatform("ios");
+                }
 
+                $http.post(URL + "/version", v).success(function(data) {
 
+                    //업데이트시 링크
+                    var link = data.link;
+
+                    if (data.force_update) {
+                        //강제업데이트
+                        $ionicPopup.show({
+                            template: '',
+                            title: '새로운 버전이 발견되었습니다.',
+                            subTitle: '지금 업데이트 하시겠습니까?',
+                            buttons: [{
+                                text: '<b>확인</b>',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    window.open(link, '_system', 'location=yes');
+                                    e.preventDefault();
+                                }
+                            }]
+                        }).then(function(res) {
+                            if (!res) {
+                                if (navigator && navigator.app && navigator.app.exitApp) {
+                                    navigator.app.exitApp();
+                                } else if (navigator && navigator.device && navigator.device.exitApp) {
+                                    navigator.device.exitApp();
+                                }
+                            }
+                        });
+                    } else if (data.update) {
+                        //업데이트
+                        $ionicPopup.show({
+                            template: '',
+                            title: '새로운 버전이 발견되었습니다.',
+                            subTitle: '지금 업데이트 하시겠습니까?',
+                            buttons: [{
+                                text: '취소',
+                                onTap: function(e) {
+
+                                }
+                            }, {
+                                text: '<b>확인</b>',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    window.open(link, '_system', 'location=yes');
+                                    e.preventDefault();
+                                }
+                            }]
+                        });
+                    }
+                });
+            }
         });
-
     })
-    .controller('HomeCtrl', function($scope, $http, URL, DEFAULTHOME, $ionicLoading,
-        $ionicScrollDelegate, $ionicSlideBoxDelegate, $cordovaDeviceOrientation, $rootScope, $window) {
+    .controller('HomeCtrl', function($scope, $http, URL, DEFAULTHOME, $ionicLoading, $location,
+        $ionicScrollDelegate, $ionicSlideBoxDelegate, $cordovaDeviceOrientation, $rootScope, $window, $ionicPopup) {
+
 
         try {
 
@@ -59,12 +128,18 @@ angular.module('starter.controllers', [])
             $ionicScrollDelegate.scrollTop();
         };
 
+        $scope.mainClick = function(item) {
+            if (item && item.type == "video") {
+                $location.path("/app/player/" + item.id);
+            }
+        };
+
         $scope.imageurl = function(item) {
             if (servererror === true) {
                 return '/img/localpreview1.jpg';
             }
             if (item.type === "series") {
-                return URL + '/media/' + item.thumb;
+                return URL + '/media/series/' + item.thumb;
             } else if (item.type === "video") {
                 return "https://i.ytimg.com/vi/" + item.youtube + "/hqdefault.jpg";
             } else if (item.type === "seriesdefault") {
@@ -78,8 +153,8 @@ angular.module('starter.controllers', [])
             if (servererror === true) {
                 return '/img/localpreview1.jpg';
             }
-            return URL + '/media/' + item.thumb;
-  
+
+            return URL + '/media/main/' + item.thumb;
         };
 
 
@@ -96,17 +171,37 @@ angular.module('starter.controllers', [])
             $ionicLoading.show({
                 template: 'Loading...'
             });
-            $http.get(URL + "/home").
-            success(function(data, status, headers, config) {
-                $ionicLoading.hide();
-                $scope.home = data;
-                $ionicSlideBoxDelegate.update();
-                $scope.series();
-            }).
-            error(function(data, status, headers, config) {
-                $ionicLoading.hide();
+            $http.get(URL + "/home")
+                .success(function(data, status, headers, config) {
+                    $ionicLoading.hide();
+                    $scope.home = data;
+                    $ionicSlideBoxDelegate.update();
+                    $scope.series();
+                })
+                .error(function(data, status, headers, config) {
+                    $ionicLoading.hide();
 
-            });
+                    $ionicPopup.show({
+                        template: '',
+                        title: '서버로부터 데이터를 받아올수 없습니다.<br/>잠시후 다시 시도해주세요.',
+                        buttons: [{
+                            text: '<b>확인</b>',
+                            type: 'button-positive',
+                            onTap: function(e) {
+
+                            }
+                        }]
+                    }).then(function(res) {
+                        if (!res) {
+                            if (navigator && navigator.app && navigator.app.exitApp) {
+                                navigator.app.exitApp();
+                            } else if (navigator && navigator.device && navigator.device.exitApp) {
+                                navigator.device.exitApp();
+                            }
+                        }
+                    });
+
+                });
         }
 
 
@@ -174,7 +269,7 @@ angular.module('starter.controllers', [])
                 return '/img/localpreview1.jpg';
             }
             if (item.type === "series") {
-                return URL + '/media/' + item.thumb;
+                return URL + '/media/series/' + item.thumb;
             } else if (item.type === "video") {
                 return "https://i.ytimg.com/vi/" + item.youtube + "/default.jpg";
             } else if (item.type === "seriesdefault") {
@@ -268,7 +363,7 @@ angular.module('starter.controllers', [])
 
         init();
     })
-    .controller('PlaylistCtrl', function($scope, $http, URL, $stateParams, $timeout, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate, $ionicScrollDelegate) {
+    .controller('PlaylistCtrl', function($scope, $http, URL, $stateParams, $timeout, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate, $ionicScrollDelegate, common) {
 
         $scope.videoinfo = {};
         $scope.series = [];
@@ -301,27 +396,40 @@ angular.module('starter.controllers', [])
 
         };
 
+        var getShareUrl = function() {
+            var platform = common.getPlatform();
+            if (platform === "android") {
+                return "https://play.google.com/store/apps/details?id=com.einfomax.ahamobile&hl=ko";
+            } else if (platform === "ios") {
+                return undefined;
+            }
+            return undefined;
+        };
+
         $scope.shareall = function(desc, code) {
             var linkurl = "http://youtu.be/" + code;
             window.plugins.socialsharing.share(desc, "아하 경제제공", null, linkurl);
         };
 
+
+
         $scope.twittershare = function(desc, code) {
-            var linkurl = "http://youtu.be/" + code;
+            var linkurl = (getShareUrl()) ? getShareUrl() : "http://youtu.be/" + code;
             window.plugins.socialsharing.shareViaTwitter("아하 경제제공:" + desc, null /* img */ , linkurl, function() {}, function(errormsg) {
                 alert("트윗을 할수 없습니다.");
             });
         };
 
         $scope.facebookshare = function(desc, code) {
-            var linkurl = "http://youtu.be/" + code;
+            var linkurl = (getShareUrl()) ? getShareUrl() : "http://youtu.be/" + code;
             window.plugins.socialsharing.shareViaFacebook("아하 경제제공:" + desc, null, linkurl, function() {}, function(errormsg) {
                 alert("Facebook에 게시 할수 없습니다.");
             });
         };
 
         $scope.kakaoshare = function(desc, code) {
-            var linkurl = "아하 경제제공:" + desc + " http://youtu.be/" + code;
+            var linkurl = (getShareUrl()) ? getShareUrl() : "http://youtu.be/" + code;
+            linkurl = "아하 경제제공:" + desc + " " + linkurl;
             KakaoLinkPlugin.call(linkurl);
         };
         $scope.openOpinionWriteModal = function() {
@@ -516,26 +624,37 @@ angular.module('starter.controllers', [])
 //설정
 .controller("SettingCtrl", ["$scope", "$http", "URL",
     function($scope, $http, URL) {
-        $scope.setting ={push:true};
-        $scope.changesetting = function()
-        {
-            if($scope.setting.push === true)
-            {
-                 $http.post(URL + "/setting" ,{uuid:device["uuid"],action:"change",push:1});
+        $scope.setting = {
+            push: true
+        };
+        $scope.changesetting = function() {
+            if ($scope.setting.push === true) {
+                $http.post(URL + "/setting", {
+                    uuid: device["uuid"],
+                    action: "change",
+                    push: 1
+                });
+            } else {
+                $http.post(URL + "/setting", {
+                    uuid: device["uuid"],
+                    action: "change",
+                    push: 0
+                });
             }
-            else
-            {
-                $http.post(URL + "/setting" ,{uuid:device["uuid"],action:"change",push:0});
-            }
-            
-        }
+
+        };
         if (window.device) {
-            $http.post(URL + "/setting" ,{uuid:device["uuid"],action:"query"}).
-            success(function(data, status, headers, config) {
-                $scope.setting.push = data.push===1?true:false;
+            $http.post(URL + "/setting", {
+                uuid: device["uuid"],
+                action: "query"
             }).
-            error(function(data, status, headers, config) {
-            });
+            success(function(data, status, headers, config) {
+
+                if (angular.isArray(data) && data.length > 0) {
+                    $scope.setting.push = data[0].push === 1 ? true : false;
+                }
+            }).
+            error(function(data, status, headers, config) {});
         }
     }
 ]);

@@ -4,9 +4,11 @@
     </ion-nav-buttons>
     <ion-content class="has-header">
         <div class="list">
-
+            <div class="item item-divider">
+                알림설정
+            </div>
             <div class="item item-toggle">
-                <font color="black">새 Episode 등록, 이벤트 알림</font>
+                <font color="black">VOD 등록 및 이벤트 알림</font>
                 <label class="toggle toggle-assertive">
                     <input type="checkbox" ng-model="setting.push" ng-change="changesetting()">
                     <div class="track">
@@ -17,8 +19,10 @@
             <div class="item item-divider">
                 버전정보
             </div>
+            <!--
             <a class="item " href="#" onclick="window.open('http://www.nraboy.com/contact', '_system', 'location=yes'); return false;">
-
+            -->
+            <a class="item" onclick="return false;">
                 <h2>서비스 개시</h2>
                 <p>v1.0</p>
             </a>

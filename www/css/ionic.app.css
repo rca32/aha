@@ -7829,7 +7829,8 @@ html, body {
     padding-left: 10px; }
   #aha-app .nav-area .list .item {
     border: 0;
-    border-bottom: 1px solid #333333; }
+    border-bottom: 1px solid #666666;
+    margin-top: 1px; }
     #aha-app .nav-area .list .item .nav-icon {
       width: 32px;
       position: absolute;
@@ -7844,15 +7845,19 @@ html, body {
     margin-top: 5px; }
   #aha-app .youtube {
     background-color: #f4f4f4; }
+    #aha-app .youtube .youtube-content.full .scroll {
+      height: 100%; }
     #aha-app .youtube .video-container {
       margin-bottom: -5px;
       height: 220px; }
+      #aha-app .youtube .video-container.full {
+        height: 100%; }
       #aha-app .youtube .video-container.normal {
         position: relative;
         z-index: 10; }
       #aha-app .youtube .video-container iframe {
         width: 100%;
-        height: 220px; }
+        height: 100%; }
     #aha-app .youtube .share-area {
       border-top: 1px solid #e3e3e3;
       background-color: #FFFFFF;
@@ -7878,9 +7883,13 @@ html, body {
     #aha-app .youtube .btn-more-area {
       position: absolute;
       top: 10px;
-      right: 10px; }
+      right: 10px;
+      padding-top: 6px; }
+      #aha-app .youtube .btn-more-area .share-img {
+        height: auto; }
   #aha-app .bar-stable {
-    border: 0; }
+    border: 0;
+    background-image: none; }
   #aha-app .title-image {
     height: 100%; }
   #aha-app .bar-footer {
@@ -7899,15 +7908,21 @@ html, body {
     #aha-app .button-bar .button.button-dark {
       background-color: #4f5668;
       font-weight: normal; }
-  #aha-app .ahaslide {
-    height: 202px; }
-    #aha-app .ahaslide .preview {
-      text-align: center;
-      margin-bottom: -5px; }
-      #aha-app .ahaslide .preview img {
-        width: 100%;
-        max-width: 100%;
-        max-height: 100%; }
+    #aha-app .button-bar .button.aha-home {
+      border-radius: 0; }
+    #aha-app .button-bar .button.aha-hot {
+      border-radius: 0; }
+  #aha-app .ahaslide .preview {
+    text-align: center; }
+    #aha-app .ahaslide .preview img {
+      width: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      margin-bottom: -6px; }
+  #aha-app .ahaslide .slider-pager {
+    top: 2px;
+    text-align: right;
+    padding-right: 5px; }
   #aha-app .ahalist .item {
     padding: 10px 20px 10px 100px;
     height: 80px;
@@ -7975,7 +7990,10 @@ html, body {
       #aha-app .ahanotice-list .notice-area .n-header .btn-more-area {
         position: absolute;
         right: 0;
-        top: 10px; }
+        top: 10px;
+        padding-top: 6px; }
+        #aha-app .ahanotice-list .notice-area .n-header .btn-more-area .share-img {
+          height: auto; }
     #aha-app .ahanotice-list .notice-area .n-body {
       padding: 8px;
       border-top: 1px solid #DDDDDD;
@@ -7983,4 +8001,6 @@ html, body {
       #aha-app .ahanotice-list .notice-area .n-body .n-contents {
         font-size: 90%; }
   #aha-app .img-area .imgseries {
-    width: 100%; }
+    width: 100%;
+    margin-bottom: -6px;
+    max-height: 246px; }

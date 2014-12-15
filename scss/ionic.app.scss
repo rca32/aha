@@ -73,7 +73,8 @@ html,body{
         .list{
             .item{
                 border: 0;
-                border-bottom: 1px solid #333333;
+                border-bottom: 1px solid #666666;
+                margin-top: 1px;
                 .nav-icon{
                     width: 32px;
                     position: absolute;
@@ -97,16 +98,24 @@ html,body{
     }
     .youtube{
         background-color: $back-list-color;
+        .youtube-content{
+            &.full .scroll{
+                height: 100%;
+            }
+        }
         .video-container{
             margin-bottom: -5px;
             height: 220px;
+            &.full{
+                height: 100%;
+            }
             &.normal{
                 position:relative;
                 z-index: 10;
             }
             iframe{
                 width:100%;
-                height: 220px;
+                height: 100%;
             }
         }
         .share-area{
@@ -135,6 +144,9 @@ html,body{
             }
             .slider-slides{
                 margin-top: 25px;
+                .slider-slide{
+                    
+                }
             }
             .playeritem{
                 text-decoration: none;
@@ -149,10 +161,15 @@ html,body{
             position: absolute;
             top: 10px;
             right: 10px;
+            padding-top: 6px;
+            .share-img{
+                height: auto;
+            }
         }
     }
     .bar-stable{
         border:0;
+        background-image: none;
     }
     .title-image{
         height: 100%;
@@ -179,22 +196,29 @@ html,body{
             }
             &.aha-home{
                 @extend .img-series;
+                border-radius:0;
             }
             &.aha-hot{
                 @extend .img-hot;
+                border-radius:0;
             }
         }
     }
     .ahaslide{
-        height: 202px;
         .preview{
             text-align: center;
-            margin-bottom:-5px;
+            
             img{
                 width:100%;
                 max-width: 100%;
                 max-height: 100%;
+                margin-bottom: -6px;
             }
+        }
+        .slider-pager{
+            top: 2px;
+            text-align: right;
+            padding-right: 5px;
         }
     }
     .ahalist{
@@ -285,6 +309,10 @@ html,body{
                     position:absolute;
                     right: 0;
                     top: 10px;
+                    padding-top: 6px;
+                    .share-img{
+                        height: auto;
+                    }
                 }
             }
             .n-body{
@@ -300,6 +328,8 @@ html,body{
     .img-area{
         .imgseries{
             width: 100%;
+            margin-bottom: -6px;
+            max-height: 246px;
         }
     }
 }
