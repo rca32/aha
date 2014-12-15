@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.einfomax.ahamobile" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>ahaApp</name>
+<widget id="com.einfomax.ahamobile" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>아하 경제TV</name>
   <description>
-        aHa 경제TV
+        아하 경제TV
     </description>
   <author email="rca32@yna.co.kr" href="http://www.einfomax.co.kr/">
       Infomax Corp. 
@@ -12,12 +12,12 @@
 
   <platform name="android">
 
-      <splash src="res/android/splash_xlarge.png" />
-      <splash src="res/android/splash_small.png" density="ldpi"/>
-      <splash src="res/android/splash_medium.png" density="mdpi"/>
-      <splash src="res/android/splash_large.png" density="hdpi"/>
-      <splash src="res/android/splash_xlarge.png" density="xhdpi"/>
-      <splash src="res/android/splash_xlarge.png" density="xxhdpi"/>
+
+      <splash src="res/android/splash_small.9.png" density="ldpi"/>
+      <splash src="res/android/splash_medium.9.png" density="mdpi"/>
+      <splash src="res/android/splash_large.9.png" density="hdpi"/>
+      <splash src="res/android/splash_xlarge.9.png" density="xhdpi"/>
+
 
 
       <icon src="res/android/icon_xxhdpi.png" />
@@ -25,7 +25,7 @@
       <icon src="res/android/icon_mdpi.png" density="mdpi" />
       <icon src="res/android/icon_hdpi.png" density="hdpi" />
       <icon src="res/android/icon_xhdpi.png" density="xhdpi" />
-      <icon src="res/android/icon_xxhdpi.png" density="xxhdpi" />
+
 
   </platform>
 
