@@ -2,7 +2,7 @@
 <widget id="com.einfomax.ahamobile" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>aHaApp</name>
   <description>
-        아하 경제TV
+        아하 경제TV 
     </description>
   <author email="rca32@yna.co.kr" href="http://www.einfomax.co.kr/">
       Infomax Corp. 
