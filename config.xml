@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.einfomax.ahamobile" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>아하 경제TV</name>
+  <name>aHaApp</name>
   <description>
         아하 경제TV
     </description>
@@ -49,6 +49,12 @@
                <!-- iPhone Spotlight and Settings Icon -->
                <icon src="res/ios/icon-small.png" width="29" height="29" />
                <icon src="res/ios/icon-small@2x.png" width="58" height="58" />
+
+              <icon src="res/ios/icon-76.png" width="76" height="76" />
+              <icon src="res/ios/icon-76@2x.png" width="152" height="152" />
+              <icon src="res/ios/icon-72.png" width="72" height="72" />
+              <icon src="res/ios/icon-72@2x.png" width="144" height="144" />
+
 
               <splash src="res/ios/Default~iphone.png" width="320" height="480"/>
               <splash src="res/ios/Default@2x~iphone.png" width="640" height="960"/>
